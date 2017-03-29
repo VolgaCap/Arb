@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<config>
+   <node log_level="debug" wait_timeout_ms="1000">
+      <loggers>
+         <logger name="cgate_engine" log_level="error"/>
+         <logger name="cgate_book"   log_level="error"/>
+         <logger name="cgate_order"  log_level="info"/>
+      </loggers>
+   </node>
+   <ui>
+      <form>
+         <textbox name="account"       type="string"/>
+         <textbox name="broker_code"   type="string"/>
+         <textbox name="quote_instr"   type="string"/>
+         <textbox name="order_instr"   type="string"/>
+         <textbox name="order_size"    type="integer" value="1"/>
+         <select  name="order_side"    type="string"  value="buy">
+            <option value="buy"        text="buy"/>
+            <option value="sell"       text="sell"/>
+         </select>
+         <spinbox name="order_price_offset"       type="integer" value="1000" min="1" max="100000" step="1"/>
+         <textbox name="quote_price_denominator"  type="double" />
+         <textbox name="prefix"  type="string" value="F"/>
+      </form>
+   </ui>
+   <cgate_engine
+      env="ini=../../config/rts_cgate.ini;key=${CGATE_KEY}"
+      conn="${CGATE_URI};app_name=dme1;local_pass=${CGATE_APP_PASS}">
+      <listener name="ORDLOG" path="p2ordbook://FORTS_ORDLOG_REPL;snapshot=FORTS_ORDBOOK_REPL;scheme=|FILE|${XROAD_ROOT_DIR}/config/ini/ordlog.ini|scheme;snapshot.scheme=|FILE|${XROAD_ROOT_DIR}/config/ini/ordbook.ini|scheme" mode="online"/>
+      <!--<listener name="TRADES" path="p2repl://FORTS_DEALS_REPL;scheme=|FILE|../../config/ini/deals.ini|scheme" mode="online"/>-->
+      <!--<listener name="FUTURES" path="p2repl://FORTS_FUTTRADE_REPL;scheme=|FILE|${XROAD_ROOT_DIR}/config/eini/fut_trades.ini|scheme" mode="online"/>-->
+      <publisher name="publ" path="p2mq://FORTS_SRV;category=FORTS_MSG;name=%P;timeout=5000;scheme=|FILE|${XROAD_ROOT_DIR}/config/eini/forts_messages.ini|message"/>
+   </cgate_engine>
+</config>

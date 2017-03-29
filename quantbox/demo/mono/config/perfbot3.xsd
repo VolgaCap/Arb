@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:include schemaLocation="node.xsd"/>
+   <xs:include schemaLocation="ui.xsd"/>
+   <xs:include schemaLocation="fast_engine.xsd"/>
+   <xs:include schemaLocation="mdata_engine.xsd"/>
+   <xs:include schemaLocation="cgate_engine.xsd"/>
+
+   <xs:element name="config">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="node"         type="node_type" />
+            <xs:element name="ui"           type="ui_type" />
+            <xs:element name="cgate_engine" type="cgate_engine_type"/>
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+</xs:schema>
